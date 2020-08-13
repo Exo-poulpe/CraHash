@@ -8,6 +8,8 @@
 #include <vector>
 #include <sstream>
 
+#include "MD5.h"
+#include "IDigest.h"
 
 #include "include/args.hxx"
 #include "include/CryptoPP/base64.h"
@@ -55,6 +57,28 @@ int main(int argc, char** argvs)
 	if (argc <= 1)
 	{
 		std::cout << parser << std::endl;
+	}
+	if (args::get(fHash) && args::get(fText) != "")
+	{
+		IDigest* digest;
+		int alpha = 3;
+		if (args::get(fAlphabet))
+		{
+			alpha = args::get(fAlphabet);
+		}
+		switch (args::get(fMode))
+		{
+		case 1:
+			digest = &MD5();
+			break;
+		default:
+			std::cout << "Error unknow mode" << std::endl;
+			exit(1);
+			break;
+		}
+
+		std::cout << digest->hash(args::get(fText)) << std::endl;
+
 	}
 	
 }

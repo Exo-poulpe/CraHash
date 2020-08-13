@@ -4,5 +4,5 @@
 
 class IDigest {
 public:
-	std::string hash(std::string text);
+	virtual std::string hash(std::string text) = 0;
 };

@@ -13,7 +13,7 @@ private:
 	const char* ALPHABET = "abcdefghijklmnopqrstuvwxyz";
 	const char* ALPHABET_UPPER = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	const char* ALPHABET_UPPER_NUMBER = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-	static std::string ToLower(std::string text);
+	std::string ToLower(std::string text);
 
 public:
 };

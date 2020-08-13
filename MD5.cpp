@@ -6,6 +6,17 @@ MD5::MD5()
 	
 }
 
+std::string MD5::ToLower(std::string text)
+{
+	std::string result;
+	result.resize(text.size());
+	for (int i = 0; i < text.size(); i++)
+	{
+		result.at(i) = std::tolower(text.at(i));
+	}
+	return result;
+}
+
 std::string MD5::hash(std::string text)
 {
 	std::string result;
@@ -22,5 +33,5 @@ std::string MD5::hash(std::string text)
 	encoder.MessageEnd();
 
 
-	return result;
+	return ToLower(result);
 }

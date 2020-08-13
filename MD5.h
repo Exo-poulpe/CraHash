@@ -15,6 +15,6 @@ public:
 	std::string hash(std::string text);
 
 private:
-	
+	std::string ToLower(std::string text);
 };
 

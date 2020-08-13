@@ -1,6 +1,18 @@
 #include "BruteForce.h"
 
-std::string BruteForcing(std::string hash, IDigest mode, char alpa[], bool verbose = false)
+
+std::string BruteForce::ToLower(std::string text)
+{
+    std::string result;
+    result.resize(text.size());
+    for (int i = 0; i < text.size(); i++)
+    {
+        result.at(i) = std::tolower(text.at(i));
+    }
+    return result;
+}
+
+std::string BruteForcing(std::string hash, IDigest* mode, char alpa[], bool verbose = false)
 {
     /*Alphabet = alpa;
     char[] tmp = [Alphabet[0]];
@@ -25,7 +37,7 @@ std::string BruteForcing(std::string hash, IDigest mode, char alpa[], bool verbo
         }
 
     }*/
-    return "string";
+    return mode->hash(hash);
 }
 
 static char* CheckPassWordLetter(char* pass)
@@ -75,9 +87,4 @@ static char NewCharFromChar(char letter)
 }
 
 
-static std::string ToLower(std::string text)
-{
-    std::transform(text.begin(), text.end(), text.begin(),
-        [](unsigned char c) { return std::tolower(c); });
-}
 
