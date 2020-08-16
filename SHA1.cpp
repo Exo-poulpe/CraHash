@@ -24,10 +24,10 @@ std::string SHA1::ToLower(std::string text)
 std::string SHA1::hash(std::string text)
 {
 	std::string result;
-	CryptoPP::byte temp[CryptoPP::MD5::DIGESTSIZE];
+	CryptoPP::byte temp[CryptoPP::SHA1::DIGESTSIZE];
 	CryptoPP::HexEncoder encoder;
 
-	CryptoPP::MD5 hash;
+	CryptoPP::SHA1 hash;
 
 	hash.CalculateDigest(temp, (CryptoPP::byte*)text.c_str(), text.size());
 
@@ -44,10 +44,10 @@ std::string SHA1::hash()
 {
 	std::string text = this->_text;
 	std::string result;
-	CryptoPP::byte temp[CryptoPP::MD5::DIGESTSIZE];
+	CryptoPP::byte temp[CryptoPP::SHA1::DIGESTSIZE];
 	CryptoPP::HexEncoder encoder;
 
-	CryptoPP::MD5 hash;
+	CryptoPP::SHA1 hash;
 
 	hash.CalculateDigest(temp, (CryptoPP::byte*)text.c_str(), text.size());
 
@@ -58,4 +58,10 @@ std::string SHA1::hash()
 
 
 	return ToLower(result);
+}
+
+std::string SHA1::info(std::string text)
+{
+	std::string result = "Text : \"" + text + "\" SHA1 : ";
+	return result;
 }

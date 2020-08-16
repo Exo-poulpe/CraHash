@@ -12,9 +12,13 @@ class MD5 : public IDigest
 {
 public:
 	MD5();
+	MD5(std::string text);
 	std::string hash(std::string text);
+	std::string hash();
+	std::string info(std::string text);
 
 private:
+	std::string _text;
 	std::string ToLower(std::string text);
 };
 

@@ -9,6 +9,7 @@
 #include <sstream>
 
 #include "MD5.h"
+#include "SHA1.h"
 #include "IDigest.h"
 
 #include "include/args.hxx"
@@ -21,7 +22,7 @@ int main(int argc, char** argvs)
 {
 	std::string hMode = "The value of mode select : \n\t1 : MD5";
 	std::string hAlphabet = "Alphabet value\n\t1 : [a-z]\n\t2 : [a-zA-Z]\n\t3 : [a-zA-Z0-9]";
-	args::ArgumentParser parser("This program test hash and generate somes hash", "Author Exo-poulpe");
+	args::ArgumentParser parser("This program test hash and generate somes hash", "Author Exo-poulpe\nExample : ./CraHash --hash -t \"TEST\" -m 1");
 	args::Group group(parser, "This group is all exclusive:", args::Group::Validators::DontCare);
 	args::Flag fVerbose(group, "verbose", "Verbosity of program", { 'v',"verbose" });
 	args::Flag fCount(group, "count", "Print count", { "count" });
@@ -30,7 +31,7 @@ int main(int argc, char** argvs)
 	args::ValueFlag<std::string> fText(group, "text", "The text to use", { 't', "text" });
 	args::ValueFlag<std::string> fWordList(group, "wordlist", "The wordlist to use", { 'w',"wordlist" });
 	args::ValueFlag<int> fMode(group, "Mode value", hMode, { 'm' });
-	args::ValueFlag<int> fAlphabet(group,"Alphabet value", hAlphabet, { 'a' });
+	args::ValueFlag<int> fAlphabet(group, "Alphabet value", hAlphabet, { 'a' });
 	args::HelpFlag help(parser, "help", "Display this help menu", { 'h', "help" });
 
 	try
@@ -62,6 +63,7 @@ int main(int argc, char** argvs)
 	{
 		IDigest* digest;
 		int alpha = 3;
+		std::string text = args::get(fText);
 		if (args::get(fAlphabet))
 		{
 			alpha = args::get(fAlphabet);
@@ -69,7 +71,10 @@ int main(int argc, char** argvs)
 		switch (args::get(fMode))
 		{
 		case 1:
-			digest = &MD5();
+			digest = &MD5(text);
+			break;
+		case 2:
+			digest = &SHA1(text);
 			break;
 		default:
 			std::cout << "Error unknow mode" << std::endl;
@@ -77,10 +82,10 @@ int main(int argc, char** argvs)
 			break;
 		}
 
-		std::cout << digest->hash(args::get(fText)) << std::endl;
+		std::cout << digest->info(text) << digest->hash(text) << std::endl;
 
 	}
-	
+
 }
 
 // Exécuter le programme : Ctrl+F5 ou menu Déboguer > Exécuter sans débogage
