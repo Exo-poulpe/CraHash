@@ -11,6 +11,7 @@
 #include "MD5.h"
 #include "SHA1.h"
 #include "IDigest.h"
+#include "BruteForce.h"
 
 #include "include/args.hxx"
 #include "include/CryptoPP/base64.h"
@@ -26,6 +27,7 @@ int main(int argc, char** argvs)
 	args::Group group(parser, "This group is all exclusive:", args::Group::Validators::DontCare);
 	args::Flag fVerbose(group, "verbose", "Verbosity of program", { 'v',"verbose" });
 	args::Flag fCount(group, "count", "Print count", { "count" });
+	args::Flag fCrack(group, "crack", "Try to crack hash", { "crack" });
 	args::Flag fBrute(group, "brute", "Use brute force", { "brute" });
 	args::Flag fHash(group, "hash", "Use hash", { "hash" });
 	args::ValueFlag<std::string> fText(group, "text", "The text to use", { 't', "text" });
