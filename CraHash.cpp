@@ -25,15 +25,15 @@ int main(int argc, char** argvs)
 	std::string hAlphabet = "Alphabet value\n\t1 : [a-z]\n\t2 : [a-zA-Z]\n\t3 : [a-zA-Z0-9]";
 	args::ArgumentParser parser("This program test hash and generate somes hash", "Author Exo-poulpe\nExample : ./CraHash --hash -t \"TEST\" -m 1");
 	args::Group group(parser, "This group is all exclusive:", args::Group::Validators::DontCare);
-	args::Flag fVerbose(group, "verbose", "Verbosity of program", { 'v',"verbose" });
-	args::Flag fCount(group, "count", "Print count", { "count" });
-	args::Flag fCrack(group, "crack", "Try to crack hash", { "crack" });
-	args::Flag fBrute(group, "brute", "Use brute force", { "brute" });
-	args::Flag fHash(group, "hash", "Use hash mode", { "hash" });
-	args::ValueFlag<std::string> fText(group, "text", "The hash to use", { 't', "text" });
-	args::ValueFlag<std::string> fWordList(group, "wordlist", "The wordlist to use", { 'w',"wordlist" });
+	args::ValueFlag<std::string> fText(group, "text", "The hash to use or text to hash", { 't', "text" });
+	args::Flag fHash(group, "hash", "Use hash mode for hash text", { "hash" });
+	args::Flag fCrack(group, "crack", "Try to crack hash with mode (-b , -w)", { "crack" });
+	args::Flag fBrute(group, "brute", "Use brute force (Bruteforce mode)", { 'b' });
+	args::ValueFlag<std::string> fWordList(group, "wordlist", "The wordlist to use (Wordlist mode)", { 'w' });
 	args::ValueFlag<int> fMode(group, "Mode value", hMode, { 'm' });
 	args::ValueFlag<int> fAlphabet(group, "Alphabet value", hAlphabet, { 'a' });
+	args::Flag fCount(group, "count", "Print count", { "count" });
+	args::Flag fVerbose(group, "verbose", "Verbosity of program", { 'v',"verbose" });
 	args::HelpFlag help(parser, "help", "Display this help menu", { 'h', "help" });
 
 	try
@@ -96,9 +96,19 @@ int main(int argc, char** argvs)
 		switch (mode)
 		{
 		case 1:
+			if (hash.size() != MD5::LENGTH)
+			{
+				std::cout << "Size of hash not valid" << std::endl;
+				exit(1);
+			}
 			digest = &MD5(hash);
 			break;
 		case 2:
+			if (hash.size() != SHA1::LENGTH)
+			{
+				std::cout << "Size of hash not valid" << std::endl;
+				exit(1);
+			}
 			digest = &SHA1(hash);
 			break;
 		default:

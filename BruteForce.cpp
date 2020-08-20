@@ -42,7 +42,6 @@ std::string BruteForce::BruteForcing(std::string hash, IDigest* mode, std::strin
 			}
 			if (verbose == true)
 			{
-
 				std::cout << "Password tested : " << tmp << " ::: " << ToLowerToHex(mode->hash(tmp)) << std::endl;
 			}
 			if (mode->hash(tmp) == hash)

@@ -16,6 +16,7 @@ public:
 	std::string hash(std::string text);
 	std::string hash();
 	std::string info(std::string text);
+	static const int LENGTH = 40;
 
 private:
 	std::string _text;
