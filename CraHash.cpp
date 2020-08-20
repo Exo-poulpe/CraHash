@@ -29,8 +29,8 @@ int main(int argc, char** argvs)
 	args::Flag fCount(group, "count", "Print count", { "count" });
 	args::Flag fCrack(group, "crack", "Try to crack hash", { "crack" });
 	args::Flag fBrute(group, "brute", "Use brute force", { "brute" });
-	args::Flag fHash(group, "hash", "Use hash", { "hash" });
-	args::ValueFlag<std::string> fText(group, "text", "The text to use", { 't', "text" });
+	args::Flag fHash(group, "hash", "Use hash mode", { "hash" });
+	args::ValueFlag<std::string> fText(group, "text", "The hash to use", { 't', "text" });
 	args::ValueFlag<std::string> fWordList(group, "wordlist", "The wordlist to use", { 'w',"wordlist" });
 	args::ValueFlag<int> fMode(group, "Mode value", hMode, { 'm' });
 	args::ValueFlag<int> fAlphabet(group, "Alphabet value", hAlphabet, { 'a' });
@@ -86,6 +86,51 @@ int main(int argc, char** argvs)
 
 		std::cout << digest->info(text) << digest->hash(text) << std::endl;
 
+	}
+	else if (args::get(fBrute) && args::get(fCrack) && args::get(fText) != "")
+	{
+		BruteForce Bf = BruteForce();
+		std::string hash = args::get(fText);
+		IDigest* digest;
+		int mode = args::get(fMode);
+		switch (mode)
+		{
+		case 1:
+			digest = &MD5(hash);
+			break;
+		case 2:
+			digest = &SHA1(hash);
+			break;
+		default:
+			exit(1);
+			break;
+		}
+		int alpa = args::get(fAlphabet);
+		std::string alp;
+		switch (alpa)
+		{
+		case 1:
+			alp = Bf.ALPHABET;
+			break;
+		case 2:
+			alp = Bf.ALPHABET_UPPER;
+			break;
+		case 3:
+			alp = Bf.ALPHABET_UPPER_NUMBER;
+			break;
+		case 4:
+			alp = Bf.ALPHABET_UPPER_NUMBER_SPECIAL;
+			break;
+		default:
+			break;
+		}
+
+		std::string result = Bf.BruteForcing(hash, digest, alp, args::get(fVerbose));
+		if (result == hash) { std::cout << "Hash not found" << std::endl; }
+		else
+		{
+			std::cout << "Hash found : " << "\"" << result << "\"" << std::endl;
+		}
 	}
 
 }
