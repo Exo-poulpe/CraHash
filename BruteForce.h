@@ -27,6 +27,6 @@ public:
 	std::string ALPHABET_UPPER_NUMBER = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 	std::string ALPHABET_UPPER_NUMBER_SPECIAL = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,-_)(/&%ç* \"!";
 	BruteForce();
-	std::string BruteForcing(std::string hash, IDigest* mode, std::string alpa, bool verbose = false);
+	std::string BruteForcing(std::string hash, IDigest* mode, std::string alpa, bool verbose = false,bool counter = false,bool timer = true);
 };
 

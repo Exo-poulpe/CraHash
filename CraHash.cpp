@@ -12,6 +12,7 @@
 #include "SHA1.h"
 #include "IDigest.h"
 #include "BruteForce.h"
+#include "WordList.h"
 
 #include "include/args.hxx"
 #include "include/CryptoPP/base64.h"
@@ -21,8 +22,8 @@
 
 int main(int argc, char** argvs)
 {
-	std::string hMode = "The value of mode select : \n\t1 : MD5";
-	std::string hAlphabet = "Alphabet value\n\t1 : [a-z]\n\t2 : [a-zA-Z]\n\t3 : [a-zA-Z0-9]";
+	std::string hMode = "The value of mode select : \n\t1 : MD5\n\t2 : SHA1";
+	std::string hAlphabet = "Alphabet value\n\t1 : [a-z]\n\t2 : [a-zA-Z]\n\t3 : [a-zA-Z0-9]\n\t4 : [a-zA-Z0-9\\s]";
 	args::ArgumentParser parser("This program test hash and generate somes hash", "Author Exo-poulpe\nExample : ./CraHash --hash -t \"TEST\" -m 1");
 	args::Group group(parser, "This group is all exclusive:", args::Group::Validators::DontCare);
 	args::ValueFlag<std::string> fText(group, "text", "The hash to use or text to hash", { 't', "text" });
@@ -33,6 +34,7 @@ int main(int argc, char** argvs)
 	args::ValueFlag<int> fMode(group, "Mode value", hMode, { 'm' });
 	args::ValueFlag<int> fAlphabet(group, "Alphabet value", hAlphabet, { 'a' });
 	args::Flag fCount(group, "count", "Print count", { "count" });
+	args::Flag fTimer(group, "timer", "Print time elasped", { "timer" });
 	args::Flag fVerbose(group, "verbose", "Verbosity of program", { 'v',"verbose" });
 	args::HelpFlag help(parser, "help", "Display this help menu", { 'h', "help" });
 
@@ -135,7 +137,42 @@ int main(int argc, char** argvs)
 			break;
 		}
 
-		std::string result = Bf.BruteForcing(hash, digest, alp, args::get(fVerbose));
+		std::string result = Bf.BruteForcing(hash, digest, alp, args::get(fVerbose), args::get(fCount), args::get(fTimer));
+		if (result == hash) { std::cout << "Hash not found" << std::endl; }
+		else
+		{
+			std::cout << "Hash found : " << "\"" << result << "\"" << std::endl;
+		}
+	}
+	else if (args::get(fWordList) != "" && args::get(fCrack) && args::get(fText) != "")
+	{
+		std::string hash = args::get(fText);
+		IDigest* digest;
+		int mode = args::get(fMode);
+		switch (mode)
+		{
+		case 1:
+			if (hash.size() != MD5::LENGTH)
+			{
+				std::cout << "Size of hash not valid" << std::endl;
+				exit(1);
+			}
+			digest = &MD5(hash);
+			break;
+		case 2:
+			if (hash.size() != SHA1::LENGTH)
+			{
+				std::cout << "Size of hash not valid" << std::endl;
+				exit(1);
+			}
+			digest = &SHA1(hash);
+			break;
+		default:
+			exit(1);
+			break;
+		}
+		WordList Word = WordList(args::get(fWordList), digest, args::get(fVerbose), args::get(fCount), args::get(fTimer));
+		std::string result = Word.Crack(args::get(fText));
 		if (result == hash) { std::cout << "Hash not found" << std::endl; }
 		else
 		{

@@ -17,7 +17,7 @@ BruteForce::BruteForce()
 
 }
 
-std::string BruteForce::BruteForcing(std::string hash, IDigest* mode, std::string alpa, bool verbose)
+std::string BruteForce::BruteForcing(std::string hash, IDigest* mode, std::string alpa, bool verbose, bool counter, bool timer)
 {
 	for (int i = 0; i < alpa.size(); i++)
 	{
@@ -42,14 +42,20 @@ std::string BruteForce::BruteForcing(std::string hash, IDigest* mode, std::strin
 			}
 			if (verbose == true)
 			{
-				std::cout << "Password tested : " << tmp << " ::: " << ToLowerToHex(mode->hash(tmp)) << std::endl;
+				std::cout << "Password tested : " << tmp << " ::: " << mode->hash(tmp) << std::endl;
 			}
 			if (mode->hash(tmp) == hash)
 			{
-				//std::chrono::system_clock::time_point stop = std::chrono::system_clock::now();
-				std::chrono::time_point<std::chrono::steady_clock> stop = Time::now();
-				fsec fs = (stop - start);
-				std::cout << "Time elapsed : " << fs.count() << " s"  << std::endl;
+				if (timer)
+				{
+					std::chrono::time_point<std::chrono::steady_clock> stop = Time::now();
+					fsec fs = (stop - start);
+					std::cout << "Time elapsed : " << fs.count() << " s" << std::endl;
+				}
+				if (counter)
+				{
+					std::cout << "Password tested : " << countPassword << std::endl;
+				}
 				return tmp;
 			}
 			tmp = CheckPassWordLetter(tmp);

@@ -1,3 +1,5 @@
 .vs/
 Debug/
 include/CryptoPP/
+x64/
+Release/
