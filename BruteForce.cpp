@@ -17,7 +17,7 @@ BruteForce::BruteForce()
 
 }
 
-std::string BruteForce::BruteForcing(std::string hash, IDigest* mode, std::string alpa, bool verbose, bool counter, bool timer)
+std::string BruteForce::BruteForcing(std::string hash, IDigest* mode, std::string alpa, int min, int max, bool verbose, bool counter, bool timer)
 {
 	for (int i = 0; i < alpa.size(); i++)
 	{
@@ -25,7 +25,7 @@ std::string BruteForce::BruteForcing(std::string hash, IDigest* mode, std::strin
 	}
 
 	std::string tmp;
-	tmp.append(1, Alphabet[0]);
+	tmp.append(min, Alphabet[0]);
 	typedef std::chrono::high_resolution_clock Time;
 	typedef std::chrono::duration<float> fsec;
 	std::chrono::time_point<std::chrono::steady_clock> start = Time::now();
@@ -59,11 +59,53 @@ std::string BruteForce::BruteForcing(std::string hash, IDigest* mode, std::strin
 				return tmp;
 			}
 			tmp = CheckPassWordLetter(tmp);
+			if (hash == "" && countPassword == 1000000)
+			{
+				std::chrono::time_point<std::chrono::steady_clock> stop = Time::now();
+				fsec fs = (stop - start);
+				std::cout << "Mode : " << mode->Name() << std::endl;
+				std::cout << "Time elapsed : " << fs.count() << " s" << std::endl;
+				std::cout << "Password tested : " << countPassword << std::endl;
+				double perSec = (double)fs.count() / countPassword;
+				double numberInt = (double)1 / perSec;
+				int countNumber = 0;
+				std::string unitNumber = "[KH/s]";
+
+				while (numberInt > 1000)
+				{
+					if (countNumber == 0)
+					{
+						numberInt /= 1000;
+						countNumber += 1;
+					}
+					else if (countNumber == 1)
+					{
+						numberInt /= 1000;
+						countNumber += 1;
+						unitNumber = "[MH/s]";
+					}
+					else if (countNumber == 2)
+					{
+						numberInt /= 1000;
+						countNumber += 1;
+						unitNumber = "[GH/s]";
+					}
+				}
+
+				std::cout << "Speed : " << std::fixed << std::setprecision(3) << numberInt << " " << unitNumber << std::endl;
+
+				return hash;
+			}
 
 		}
 
 	}
 	return hash;
+}
+
+void BruteForce::Benchmark(IDigest* digest)
+{
+	BruteForcing("", digest, this->ALPHABET, 1, 5, false, true, true);
 }
 
 std::string BruteForce::ToLowerToHex(std::string text)

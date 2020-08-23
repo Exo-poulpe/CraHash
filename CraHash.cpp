@@ -33,6 +33,7 @@ int main(int argc, char** argvs)
 	args::ValueFlag<std::string> fWordList(group, "wordlist", "The wordlist to use (Wordlist mode)", { 'w' });
 	args::ValueFlag<int> fMode(group, "Mode value", hMode, { 'm' });
 	args::ValueFlag<int> fAlphabet(group, "Alphabet value", hAlphabet, { 'a' });
+	args::Flag fBench(group, "benchmark", "Test benchmark mode (With mode)", { "benchmark" });
 	args::Flag fCount(group, "count", "Print count", { "count" });
 	args::Flag fTimer(group, "timer", "Print time elasped", { "timer" });
 	args::Flag fVerbose(group, "verbose", "Verbosity of program", { 'v',"verbose" });
@@ -178,6 +179,25 @@ int main(int argc, char** argvs)
 		{
 			std::cout << "Hash found : " << "\"" << result << "\"" << std::endl;
 		}
+	}
+	else if (args::get(fBench) && args::get(fMode) != 0)
+	{
+		BruteForce Bf = BruteForce();
+		IDigest* digest;
+		int mode = args::get(fMode);
+		switch (mode)
+		{
+		case 1:
+			digest = &MD5();
+			break;
+		case 2:
+			digest = &SHA1();
+			break;
+		default:
+			exit(1);
+			break;
+		}
+		Bf.Benchmark(digest);
 	}
 
 }

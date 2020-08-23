@@ -16,6 +16,7 @@ public:
 	std::string hash(std::string text);
 	std::string hash();
 	std::string info(std::string text);
+	std::string Name();
 	static const int LENGTH = 32;
 
 private:

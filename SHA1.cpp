@@ -65,3 +65,9 @@ std::string SHA1::info(std::string text)
 	std::string result = "Text : \"" + text + "\" SHA1 : ";
 	return result;
 }
+
+std::string SHA1::Name()
+{
+	std::string result = "SHA1";
+	return result;
+}

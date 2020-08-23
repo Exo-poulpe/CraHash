@@ -66,3 +66,9 @@ std::string MD5::info(std::string text)
 	std::string result = "Text : \"" + text + "\" MD5 : ";
 	return result;
 }
+
+std::string MD5::Name()
+{
+	std::string result = "MD5";
+	return result;
+}
