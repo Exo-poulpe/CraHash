@@ -1,5 +1,7 @@
 #pragma once
 
+
+#include <iostream>
 #include <string>
 #include <chrono>
 #include <iomanip>
@@ -19,7 +21,7 @@ private:
 	std::string ToLowerToHex(std::string text);
 	std::string CheckPassWordLetter(std::string pass);
 	char NewCharFromChar(char letter);
-	std::vector<char> Alphabet;
+	std::string Alphabet;
 	unsigned int countPassword = 0;
 
 public:

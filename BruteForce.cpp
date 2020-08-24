@@ -21,7 +21,7 @@ std::string BruteForce::BruteForcing(std::string hash, IDigest* mode, std::strin
 {
 	for (int i = 0; i < alpa.size(); i++)
 	{
-		Alphabet.push_back(alpa.at(i));
+		Alphabet.append(1, alpa.at(i));
 	}
 
 	std::string tmp;
@@ -40,7 +40,7 @@ std::string BruteForce::BruteForcing(std::string hash, IDigest* mode, std::strin
 			{
 				countPassword = countPassword;
 			}
-			if (verbose == true)
+			if (verbose == true && hash != "")
 			{
 				std::cout << "Password tested : " << tmp << " ::: " << mode->hash(tmp) << std::endl;
 			}
@@ -67,7 +67,7 @@ std::string BruteForce::BruteForcing(std::string hash, IDigest* mode, std::strin
 				std::cout << "Time elapsed : " << fs.count() << " s" << std::endl;
 				std::cout << "Password tested : " << countPassword << std::endl;
 				double perSec = (double)fs.count() / countPassword;
-				double numberInt = (double)1 / perSec;
+				double numberInt = (double)countPassword / fs.count();
 				int countNumber = 0;
 				std::string unitNumber = "[KH/s]";
 
@@ -105,7 +105,7 @@ std::string BruteForce::BruteForcing(std::string hash, IDigest* mode, std::strin
 
 void BruteForce::Benchmark(IDigest* digest)
 {
-	BruteForcing("", digest, this->ALPHABET, 1, 5, false, true, true);
+	std::string tmp = BruteForcing("", digest, this->ALPHABET, 1, 5, false, true, true);
 }
 
 std::string BruteForce::ToLowerToHex(std::string text)
