@@ -43,19 +43,7 @@ std::string SHA1::hash(std::string text)
 std::string SHA1::hash()
 {
 	std::string text = this->_text;
-	std::string result;
-	CryptoPP::byte temp[CryptoPP::SHA1::DIGESTSIZE];
-	CryptoPP::HexEncoder encoder;
-
-	CryptoPP::SHA1 hash;
-
-	hash.CalculateDigest(temp, (CryptoPP::byte*)text.c_str(), text.size());
-
-
-	encoder.Attach(new CryptoPP::StringSink(result));
-	encoder.Put(temp, sizeof(temp));
-	encoder.MessageEnd();
-
+	std::string result = hash(this->_text);
 
 	return ToLower(result);
 }

@@ -36,10 +36,6 @@ std::string BruteForce::BruteForcing(std::string hash, IDigest* mode, std::strin
 		for (int i = 0; i < Alphabet.size(); i++)
 		{
 			countPassword++;
-			if (countPassword == 475252)
-			{
-				countPassword = countPassword;
-			}
 			if (verbose == true && hash != "")
 			{
 				std::cout << "Password tested : " << tmp << " ::: " << mode->hash(tmp) << std::endl;

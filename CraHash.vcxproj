@@ -90,7 +90,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>D:\C++\CraHash\include\args.hxx;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\C++\CraHash\include\;D:\C++\CraHash\include\args.hxx;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -126,7 +126,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>D:\C++\CraHash\include\args.hxx;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\C++\CraHash\include\;D:\C++\CraHash\include\args.hxx;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -162,6 +162,7 @@
     <ClCompile Include="BruteForce.cpp" />
     <ClCompile Include="CraHash.cpp" />
     <ClCompile Include="MD5.cpp" />
+    <ClCompile Include="NTLM.cpp" />
     <ClCompile Include="SHA1.cpp" />
     <ClCompile Include="WordList.cpp" />
   </ItemGroup>
@@ -169,6 +170,7 @@
     <ClInclude Include="BruteForce.h" />
     <ClInclude Include="IDigest.h" />
     <ClInclude Include="MD5.h" />
+    <ClInclude Include="NTLM.h" />
     <ClInclude Include="SHA1.h" />
     <ClInclude Include="WordList.h" />
   </ItemGroup>

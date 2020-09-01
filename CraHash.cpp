@@ -9,6 +9,7 @@
 #include <sstream>
 
 #include "MD5.h"
+#include "NTLM.h"
 #include "SHA1.h"
 #include "IDigest.h"
 #include "BruteForce.h"
@@ -20,11 +21,22 @@
 #include "include/CryptoPP/hex.h"
 #include "include/CryptoPP/files.h"
 
+std::string ToLower(std::string text)
+{
+	std::string result;
+	result.resize(text.size());
+	for (int i = 0; i < text.size(); i++)
+	{
+		result.at(i) = std::tolower(text.at(i));
+	}
+	return result;
+}
+
 int main(int argc, char** argvs)
 {
-	std::string hMode = "The value of mode select : \n\t1 : MD5\n\t2 : SHA1";
+	std::string hMode = "The value of mode select : \n\t1 : MD5\n\t2 : SHA1\n\t3 : NTLM";
 	std::string hAlphabet = "Alphabet value\n\t1 : [a-z]\n\t2 : [a-zA-Z]\n\t3 : [a-zA-Z0-9]\n\t4 : [a-zA-Z0-9\\s]";
-	args::ArgumentParser parser("This program test hash and generate somes hash", "Author Exo-poulpe\nExample : ./CraHash --hash -t \"TEST\" -m 1");
+	args::ArgumentParser parser("This program test hash and generate somes hash", "Author Exo-poulpe\nExample : ./CraHash --hash -t \"TEST\" -m 1\nExample : ./CraHash --crack -w rockyou.txt -m 1 -t \"f4e0d0452b352a5bf0a1a5f2a65cb88b\" --timer --count");
 	args::Group group(parser, "This group is all exclusive:", args::Group::Validators::DontCare);
 	args::ValueFlag<std::string> fText(group, "text", "The hash to use or text to hash", { 't', "text" });
 	args::Flag fHash(group, "hash", "Use hash mode for hash text", { "hash" });
@@ -81,6 +93,9 @@ int main(int argc, char** argvs)
 		case 2:
 			digest = &SHA1(text);
 			break;
+		case 3:
+			digest = &NTLM(text);
+			break;
 		default:
 			std::cout << "Error unknow mode" << std::endl;
 			exit(1);
@@ -93,7 +108,7 @@ int main(int argc, char** argvs)
 	else if (args::get(fBrute) && args::get(fCrack) && args::get(fText) != "")
 	{
 		BruteForce Bf = BruteForce();
-		std::string hash = args::get(fText);
+		std::string hash = ToLower(args::get(fText));
 		IDigest* digest;
 		int mode = args::get(fMode);
 		switch (mode)
@@ -113,6 +128,14 @@ int main(int argc, char** argvs)
 				exit(1);
 			}
 			digest = &SHA1(hash);
+			break;
+		case 3:
+			if (hash.size() != NTLM::LENGTH)
+			{
+				std::cout << "Size of hash not valid" << std::endl;
+				exit(1);
+			}
+			digest = &NTLM(hash);
 			break;
 		default:
 			exit(1);
@@ -138,7 +161,7 @@ int main(int argc, char** argvs)
 			break;
 		}
 
-		std::string result = Bf.BruteForcing(hash, digest, alp, args::get(fVerbose), args::get(fCount), args::get(fTimer));
+		std::string result = Bf.BruteForcing(hash, digest, alp, 1, 0, args::get(fVerbose), args::get(fCount), args::get(fTimer));
 		if (result == hash) { std::cout << "Hash not found" << std::endl; }
 		else
 		{
@@ -147,7 +170,7 @@ int main(int argc, char** argvs)
 	}
 	else if (args::get(fWordList) != "" && args::get(fCrack) && args::get(fText) != "")
 	{
-		std::string hash = args::get(fText);
+		std::string hash = ToLower(args::get(fText));
 		IDigest* digest;
 		int mode = args::get(fMode);
 		switch (mode)
@@ -168,6 +191,14 @@ int main(int argc, char** argvs)
 			}
 			digest = &SHA1(hash);
 			break;
+		case 3:
+			if (hash.size() != NTLM::LENGTH)
+			{
+				std::cout << "Size of hash not valid" << std::endl;
+				exit(1);
+			}
+			digest = &NTLM(hash);
+			break;
 		default:
 			exit(1);
 			break;
@@ -182,6 +213,9 @@ int main(int argc, char** argvs)
 	}
 	else if (args::get(fBench) && args::get(fMode) != 0)
 	{
+		typedef std::chrono::high_resolution_clock Time;
+		typedef std::chrono::duration<float> fsec;
+		std::chrono::time_point<std::chrono::steady_clock> start = Time::now();
 		BruteForce Bf = BruteForce();
 		IDigest* digest;
 		int mode = args::get(fMode);
@@ -193,11 +227,51 @@ int main(int argc, char** argvs)
 		case 2:
 			digest = &SHA1();
 			break;
+		case 3:
+			digest = &NTLM();
+			break;
 		default:
 			exit(1);
 			break;
 		}
-		Bf.Benchmark(digest);
+		std::cout << "Mode : " << digest->Name() << std::endl;
+		std::cout << "Password tested : " << 1000000 << std::endl;
+		std::cout << "====================================" << std::endl;
+		for (unsigned int i = 0; i < 1000000; i += 1)
+		{
+			digest->hash(std::to_string(i));
+		}
+		std::chrono::time_point<std::chrono::steady_clock> stop = Time::now();
+		fsec fs = (stop - start);
+		std::cout << "Time elapsed : " << fs.count() << " s" << std::endl;
+		double perSec = (double)fs.count() / 1000000;
+		double numberInt = (double)1000000 / fs.count();
+		int countNumber = 0;
+		std::string unitNumber = "[KH/s]";
+
+		while (numberInt > 1000)
+		{
+			if (countNumber == 0)
+			{
+				numberInt /= 1000;
+				countNumber += 1;
+			}
+			else if (countNumber == 1)
+			{
+				numberInt /= 1000;
+				countNumber += 1;
+				unitNumber = "[MH/s]";
+			}
+			else if (countNumber == 2)
+			{
+				numberInt /= 1000;
+				countNumber += 1;
+				unitNumber = "[GH/s]";
+			}
+		}
+
+		std::cout << "Speed : " << std::fixed << std::setprecision(3) << numberInt << " " << unitNumber << std::endl;
+		//Bf.Benchmark(digest);
 	}
 
 }
