@@ -16,6 +16,20 @@ WordList::WordList(std::string filePath, IDigest* digest, bool verbose, bool cou
 
 std::string WordList::Crack(std::string hash)
 {
+	/*keyPressed = false;
+	boost::thread mt([]()
+		{
+			while (true)
+			{
+				if (std::cin.get() == '\n')
+				{
+					keyPressed = true;
+				}
+			}
+		}
+	);*/
+
+
 	typedef std::chrono::high_resolution_clock Time;
 	typedef std::chrono::duration<float> fsec;
 	std::chrono::time_point<std::chrono::steady_clock> start = Time::now();
@@ -31,6 +45,18 @@ std::string WordList::Crack(std::string hash)
 		{
 			std::cout << "Password tested \t: " << line << " :::" << tmp << std::endl;
 		}
+		/*if (keyPressed)
+		{
+			std::chrono::time_point<std::chrono::steady_clock> stop = Time::now();
+			fsec fs = (stop - start);
+			std::cout << "=======================================" << std::endl;
+			std::cout << "Mode \t\t\t: " << this->_digest->Name() << std::endl;
+			std::cout << "Time elapsed    \t: " << fs.count() << " s" << std::endl;
+			std::cout << "Password count  \t: " << this->counter << std::endl;
+			std::cout << "Password tested \t: " << tmp << " ::: " << this->_digest->hash(tmp) << std::endl;
+			std::cout << "=======================================" << std::endl;
+			keyPressed = false;
+		}*/
 		if (tmp == hash)
 		{
 			if (this->_timer)

@@ -5,6 +5,9 @@
 
 #include "IDigest.h"
 
+#include "boost/thread/thread.hpp"
+
+
 class WordList
 {
 private:

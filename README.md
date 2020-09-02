@@ -85,3 +85,16 @@ Speed           : ~1.6899 [KH/s]
 ```
 
 For benchmark CraHash test 1'000'000 MD5 hash (default), the result is not very accurate
+
+### Features ###
+
+You can press ENTER key when you crack hash for info
+
+```
+=======================================
+Mode                    : MD5
+Time elapsed            : 12.3861 s
+Password count          : 150859
+Password tested         : gdoh ::: b7dfb4a85939fffe2c7735c20f2f1489
+=======================================
+```

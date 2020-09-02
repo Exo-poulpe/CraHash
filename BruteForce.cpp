@@ -1,6 +1,5 @@
 #include "BruteForce.h"
 
-
 std::string BruteForce::ToLower(std::string text)
 {
 	std::string result;
@@ -14,11 +13,26 @@ std::string BruteForce::ToLower(std::string text)
 
 BruteForce::BruteForce()
 {
-
+	keyPressed = false;
 }
+
 
 std::string BruteForce::BruteForcing(std::string hash, IDigest* mode, std::string alpa, int min, int max, bool verbose, bool counter, bool timer)
 {
+
+
+	boost::thread mt([]()
+		{
+			while (true)
+			{
+				if (std::cin.get() == '\n')
+				{
+					keyPressed = true;
+				}
+			}
+		}
+	);
+
 	for (int i = 0; i < alpa.size(); i++)
 	{
 		Alphabet.append(1, alpa.at(i));
@@ -39,6 +53,18 @@ std::string BruteForce::BruteForcing(std::string hash, IDigest* mode, std::strin
 			if (verbose == true && hash != "")
 			{
 				std::cout << "Password tested \t: " << tmp << " ::: " << mode->hash(tmp) << std::endl;
+			}
+			if (keyPressed)
+			{
+				std::chrono::time_point<std::chrono::steady_clock> stop = Time::now();
+				fsec fs = (stop - start);
+				std::cout << "=======================================" << std::endl;
+				std::cout << "Mode \t\t\t: " << mode->Name() << std::endl;
+				std::cout << "Time elapsed    \t: " << fs.count() << " s" << std::endl;
+				std::cout << "Password count  \t: " << countPassword << std::endl;
+				std::cout << "Password tested \t: " << tmp << " ::: " << mode->hash(tmp) << std::endl;
+				std::cout << "=======================================" << std::endl;
+				keyPressed = false;
 			}
 			if (mode->hash(tmp) == hash)
 			{
@@ -157,6 +183,3 @@ char BruteForce::NewCharFromChar(char letter)
 	}
 	return Alphabet[0];
 }
-
-
-

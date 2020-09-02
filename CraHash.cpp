@@ -22,6 +22,8 @@
 #include "include/CryptoPP/hex.h"
 #include "include/CryptoPP/files.h"
 
+
+
 std::string ToLower(std::string text)
 {
 	std::string result;
