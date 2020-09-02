@@ -3,3 +3,4 @@ Debug/
 include/CryptoPP/
 x64/
 Release/
+include/boost/

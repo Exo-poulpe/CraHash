@@ -9,11 +9,11 @@
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <LocalDebuggerCommandArguments>--crack -b -m 3 -a 1 -t "0CB6948805F797BF2A82807973B89537" --count --timer</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments>--benchmark -m 1</LocalDebuggerCommandArguments>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <LocalDebuggerCommandArguments>--crack -b -m 3 -a 1 -t "0CB6948805F797BF2A82807973B89537" --count --timer</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments>--benchmark -m 1</LocalDebuggerCommandArguments>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
 </Project>

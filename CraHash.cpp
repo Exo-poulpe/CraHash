@@ -16,6 +16,7 @@
 #include "WordList.h"
 
 #include "include/args.hxx"
+#include "boost/thread/thread.hpp"
 #include "include/CryptoPP/base64.h"
 #include "include/CryptoPP/md5.h"
 #include "include/CryptoPP/hex.h"
@@ -32,11 +33,26 @@ std::string ToLower(std::string text)
 	return result;
 }
 
+
+std::string RunDigest(void* tmp, std::string text)
+{
+	IDigest* digest = (IDigest*)tmp;
+	return digest->hash(text);
+}
+
 int main(int argc, char** argvs)
 {
+
 	std::string hMode = "The value of mode select : \n\t1 : MD5\n\t2 : SHA1\n\t3 : NTLM";
 	std::string hAlphabet = "Alphabet value\n\t1 : [a-z]\n\t2 : [a-zA-Z]\n\t3 : [a-zA-Z0-9]\n\t4 : [a-zA-Z0-9\\s]";
-	args::ArgumentParser parser("This program test hash and generate somes hash", "Author Exo-poulpe\nExample : ./CraHash --hash -t \"TEST\" -m 1\nExample : ./CraHash --crack -w rockyou.txt -m 1 -t \"f4e0d0452b352a5bf0a1a5f2a65cb88b\" --timer --count");
+	std::string hParser = R"(Author : Exo-poulpe
+Version : 0.0.1.3
+
+Example : 
+./CraHash --hash -t \"TEST\" -m 1 --timer --count
+./CraHash --crack -b -m 1 -t \"f4e0d0452b352a5bf0a1a5f2a65cb88b\")";
+
+	args::ArgumentParser parser("This program test hash and generate somes hash", hParser);
 	args::Group group(parser, "This group is all exclusive:", args::Group::Validators::DontCare);
 	args::ValueFlag<std::string> fText(group, "text", "The hash to use or text to hash", { 't', "text" });
 	args::Flag fHash(group, "hash", "Use hash mode for hash text", { "hash" });
@@ -47,6 +63,7 @@ int main(int argc, char** argvs)
 	args::ValueFlag<int> fAlphabet(group, "Alphabet value", hAlphabet, { 'a' });
 	args::Flag fBench(group, "benchmark", "Test benchmark mode (With mode)", { "benchmark" });
 	args::Flag fCount(group, "count", "Print count", { "count" });
+	args::Flag fSimple(group, "simple", "Resume options when start attack", { "simple" });
 	args::Flag fTimer(group, "timer", "Print time elasped", { "timer" });
 	args::Flag fVerbose(group, "verbose", "Verbosity of program", { 'v',"verbose" });
 	args::HelpFlag help(parser, "help", "Display this help menu", { 'h', "help" });
@@ -105,7 +122,7 @@ int main(int argc, char** argvs)
 		std::cout << digest->info(text) << digest->hash(text) << std::endl;
 
 	}
-	else if (args::get(fBrute) && args::get(fCrack) && args::get(fText) != "")
+	else if (args::get(fBrute) && args::get(fCrack) && args::get(fText) != "" && args::get(fAlphabet) != NULL)
 	{
 		BruteForce Bf = BruteForce();
 		std::string hash = ToLower(args::get(fText));
@@ -141,6 +158,7 @@ int main(int argc, char** argvs)
 			exit(1);
 			break;
 		}
+
 		int alpa = args::get(fAlphabet);
 		std::string alp;
 		switch (alpa)
@@ -160,12 +178,17 @@ int main(int argc, char** argvs)
 		default:
 			break;
 		}
-
+		if (args::get(fSimple))
+		{
+			std::cout << "Mode \t\t: " << digest->Name() << std::endl;
+			std::cout << "Hash to find \t: " << args::get(fText) << std::endl;
+			std::cout << "====================================" << std::endl;
+		}
 		std::string result = Bf.BruteForcing(hash, digest, alp, 1, 0, args::get(fVerbose), args::get(fCount), args::get(fTimer));
 		if (result == hash) { std::cout << "Hash not found" << std::endl; }
 		else
 		{
-			std::cout << "Hash found : " << "\"" << result << "\"" << std::endl;
+			std::cout << "Hash found \t: " << "\"" << result << "\"" << std::endl;
 		}
 	}
 	else if (args::get(fWordList) != "" && args::get(fCrack) && args::get(fText) != "")
@@ -203,12 +226,20 @@ int main(int argc, char** argvs)
 			exit(1);
 			break;
 		}
+
+		if (args::get(fSimple))
+		{
+			std::cout << "Mode \t\t: " << digest->Name() << std::endl;
+			std::cout << "Wordlist used \t: " << args::get(fWordList) << std::endl;
+			std::cout << "Hash to find \t: " << args::get(fText) << std::endl;
+			std::cout << "====================================" << std::endl;
+		}
 		WordList Word = WordList(args::get(fWordList), digest, args::get(fVerbose), args::get(fCount), args::get(fTimer));
 		std::string result = Word.Crack(args::get(fText));
 		if (result == hash) { std::cout << "Hash not found" << std::endl; }
 		else
 		{
-			std::cout << "Hash found : " << "\"" << result << "\"" << std::endl;
+			std::cout << "Hash found \t: " << "\"" << result << "\"" << std::endl;
 		}
 	}
 	else if (args::get(fBench) && args::get(fMode) != 0)
@@ -234,18 +265,41 @@ int main(int argc, char** argvs)
 			exit(1);
 			break;
 		}
-		std::cout << "Mode : " << digest->Name() << std::endl;
-		std::cout << "Password tested : " << 1000000 << std::endl;
+		int count = 1000000;
+		std::cout << "Mode \t\t: " << digest->Name() << std::endl;
+		std::cout << "Password tested\t: " << count << std::endl;
 		std::cout << "====================================" << std::endl;
-		for (unsigned int i = 0; i < 1000000; i += 1)
+
+		int CORES = static_cast<int>(boost::thread::hardware_concurrency());
+
+		std::vector<std::thread*> t;
+
+		for (unsigned int i = 0; i < count; i += 1)
 		{
-			digest->hash(std::to_string(i));
+
+			std::vector<boost::thread*> threads(std::min(CORES, count));
+			for (size_t i = 0; i < threads.size(); ++i) { // Start appropriate number of threads
+				threads[i] = new boost::thread(RunDigest, (void*)digest, std::to_string(i));
+			}
+			for (size_t i = 0; i < threads.size(); ++i) { // Wait for all threads to finish
+				threads[i]->join();
+				delete threads[i];
+				--count;
+			}
+
+			//boost::thread _th = boost::thread(RunDigest,(void*)digest ,std::to_string(i));
+			//digest->hash(std::to_string(i));
 		}
+
 		std::chrono::time_point<std::chrono::steady_clock> stop = Time::now();
 		fsec fs = (stop - start);
-		std::cout << "Time elapsed : " << fs.count() << " s" << std::endl;
+		std::cout << "Time elapsed \t: " << fs.count() << " s" << std::endl;
 		double perSec = (double)fs.count() / 1000000;
-		double numberInt = (double)1000000 / fs.count();
+		double numberInt = (double)count / fs.count();
+		if (args::get(fVerbose))
+		{
+			std::cout << "count : " << count << " time : " << fs.count() << " Res : " << (unsigned long int)numberInt << std::endl;
+		}
 		int countNumber = 0;
 		std::string unitNumber = "[KH/s]";
 
@@ -270,7 +324,7 @@ int main(int argc, char** argvs)
 			}
 		}
 
-		std::cout << "Speed : " << std::fixed << std::setprecision(3) << numberInt << " " << unitNumber << std::endl;
+		std::cout << "Speed \t\t: ~" << std::fixed << std::setprecision(4) << numberInt << " " << unitNumber << std::endl;
 		//Bf.Benchmark(digest);
 	}
 

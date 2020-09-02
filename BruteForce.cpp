@@ -38,7 +38,7 @@ std::string BruteForce::BruteForcing(std::string hash, IDigest* mode, std::strin
 			countPassword++;
 			if (verbose == true && hash != "")
 			{
-				std::cout << "Password tested : " << tmp << " ::: " << mode->hash(tmp) << std::endl;
+				std::cout << "Password tested \t: " << tmp << " ::: " << mode->hash(tmp) << std::endl;
 			}
 			if (mode->hash(tmp) == hash)
 			{
@@ -46,11 +46,11 @@ std::string BruteForce::BruteForcing(std::string hash, IDigest* mode, std::strin
 				{
 					std::chrono::time_point<std::chrono::steady_clock> stop = Time::now();
 					fsec fs = (stop - start);
-					std::cout << "Time elapsed : " << fs.count() << " s" << std::endl;
+					std::cout << "Time elapsed \t: " << fs.count() << " s" << std::endl;
 				}
 				if (counter)
 				{
-					std::cout << "Password tested : " << countPassword << std::endl;
+					std::cout << "Password tested\t: " << countPassword << std::endl;
 				}
 				return tmp;
 			}
@@ -59,9 +59,9 @@ std::string BruteForce::BruteForcing(std::string hash, IDigest* mode, std::strin
 			{
 				std::chrono::time_point<std::chrono::steady_clock> stop = Time::now();
 				fsec fs = (stop - start);
-				std::cout << "Mode : " << mode->Name() << std::endl;
-				std::cout << "Time elapsed : " << fs.count() << " s" << std::endl;
-				std::cout << "Password tested : " << countPassword << std::endl;
+				std::cout << "Mode \t\t: " << mode->Name() << std::endl;
+				std::cout << "Time elapsed \t: " << fs.count() << " s" << std::endl;
+				std::cout << "Password tested \t: " << countPassword << std::endl;
 				double perSec = (double)fs.count() / countPassword;
 				double numberInt = (double)countPassword / fs.count();
 				int countNumber = 0;
@@ -88,7 +88,7 @@ std::string BruteForce::BruteForcing(std::string hash, IDigest* mode, std::strin
 					}
 				}
 
-				std::cout << "Speed : " << std::fixed << std::setprecision(3) << numberInt << " " << unitNumber << std::endl;
+				std::cout << "Speed \t: ~" << std::fixed << std::setprecision(3) << numberInt << " " << unitNumber << std::endl;
 
 				return hash;
 			}

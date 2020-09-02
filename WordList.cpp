@@ -29,7 +29,7 @@ std::string WordList::Crack(std::string hash)
 		counter += 1;
 		if (this->_verbose)
 		{
-			std::cout << "Password tested : " << line << " :::" << tmp << std::endl;
+			std::cout << "Password tested \t: " << line << " :::" << tmp << std::endl;
 		}
 		if (tmp == hash)
 		{
@@ -37,11 +37,11 @@ std::string WordList::Crack(std::string hash)
 			{
 				std::chrono::time_point<std::chrono::steady_clock> stop = Time::now();
 				fsec fs = (stop - start);
-				std::cout << "Time elapsed : " << fs.count() << " s" << std::endl;
+				std::cout << "Time elapsed \t: " << fs.count() << " s" << std::endl;
 			}
 			if (this->_counter)
 			{
-				std::cout << "Password number : " << this->counter << std::endl;
+				std::cout << "Password number\t: " << this->counter << std::endl;
 			}
 			input.close();
 			return line;
@@ -52,11 +52,11 @@ std::string WordList::Crack(std::string hash)
 	{
 		std::chrono::time_point<std::chrono::steady_clock> stop = Time::now();
 		fsec fs = (stop - start);
-		std::cout << "Time elapsed : " << fs.count() << " s" << std::endl;
+		std::cout << "Time elapsed \t: " << fs.count() << " s" << std::endl;
 	}
 	if (this->_counter)
 	{
-		std::cout << "Password number : " << this->counter << std::endl;
+		std::cout << "Password number \t: " << this->counter << std::endl;
 	}
 	return hash;
 
