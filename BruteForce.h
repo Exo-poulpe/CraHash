@@ -7,13 +7,12 @@
 #include <iomanip>
 
 #include "IDigest.h"
+#include "Crackable.h"
 
 #include "include/CryptoPP/base64.h"
 #include "include/CryptoPP/hex.h"
 #include "include/CryptoPP/md5.h"
 #include "boost/thread/thread.hpp"
-
-namespace { bool keyPressed = false; }
 
 
 class BruteForce

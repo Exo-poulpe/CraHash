@@ -4,6 +4,7 @@
 #include <chrono>
 
 #include "IDigest.h"
+#include "Crackable.h"
 
 #include "boost/thread/thread.hpp"
 

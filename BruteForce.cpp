@@ -13,7 +13,7 @@ std::string BruteForce::ToLower(std::string text)
 
 BruteForce::BruteForce()
 {
-	keyPressed = false;
+	KeyEventCapture::keyPressed = false;
 }
 
 
@@ -27,7 +27,7 @@ std::string BruteForce::BruteForcing(std::string hash, IDigest* mode, std::strin
 			{
 				if (std::cin.get() == '\n')
 				{
-					keyPressed = true;
+					KeyEventCapture::keyPressed = true;
 				}
 			}
 		}
@@ -54,7 +54,7 @@ std::string BruteForce::BruteForcing(std::string hash, IDigest* mode, std::strin
 			{
 				std::cout << "Password tested \t: " << tmp << " ::: " << mode->hash(tmp) << std::endl;
 			}
-			if (keyPressed)
+			if (KeyEventCapture::keyPressed)
 			{
 				std::chrono::time_point<std::chrono::steady_clock> stop = Time::now();
 				fsec fs = (stop - start);
@@ -64,7 +64,7 @@ std::string BruteForce::BruteForcing(std::string hash, IDigest* mode, std::strin
 				std::cout << "Password count  \t: " << countPassword << std::endl;
 				std::cout << "Password tested \t: " << tmp << " ::: " << mode->hash(tmp) << std::endl;
 				std::cout << "=======================================" << std::endl;
-				keyPressed = false;
+				KeyEventCapture::keyPressed = false;
 			}
 			if (mode->hash(tmp) == hash)
 			{

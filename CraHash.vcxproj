@@ -168,6 +168,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BruteForce.h" />
+    <ClInclude Include="Crackable.h" />
     <ClInclude Include="IDigest.h" />
     <ClInclude Include="MD5.h" />
     <ClInclude Include="NTLM.h" />

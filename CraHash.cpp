@@ -48,7 +48,7 @@ int main(int argc, char** argvs)
 	std::string hMode = "The value of mode select : \n\t1 : MD5\n\t2 : SHA1\n\t3 : NTLM";
 	std::string hAlphabet = "Alphabet value\n\t1 : [a-z]\n\t2 : [a-zA-Z]\n\t3 : [a-zA-Z0-9]\n\t4 : [a-zA-Z0-9\\s]";
 	std::string hParser = R"(Author : Exo-poulpe
-Version : 0.0.1.3
+Version : 0.0.1.4
 
 Example : 
 ./CraHash --hash -t \"TEST\" -m 1 --timer --count
