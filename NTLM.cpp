@@ -153,7 +153,7 @@ std::string NTLM::hash(std::string text)
 	//hex_format[33] = 0;
 
 	std::string res = std::string(hex_format);
-	
+
 	return ToLower(res);
 }
 

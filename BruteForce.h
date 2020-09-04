@@ -24,6 +24,7 @@ private:
 	std::string ToLower(std::string text);
 	std::string ToLowerToHex(std::string text);
 	std::string CheckPassWordLetter(std::string pass);
+	std::vector<char> CheckPassWordLetter(std::vector<char> pass);
 	char NewCharFromChar(char letter);
 	std::string Alphabet;
 	unsigned int countPassword = 0;

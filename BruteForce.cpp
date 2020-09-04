@@ -20,7 +20,7 @@ BruteForce::BruteForce()
 std::string BruteForce::BruteForcing(std::string hash, IDigest* mode, std::string alpa, int min, int max, bool verbose, bool counter, bool timer)
 {
 
-
+	const char* resultHash = hash.c_str();
 	boost::thread mt([]()
 		{
 			while (true)
@@ -49,10 +49,11 @@ std::string BruteForce::BruteForcing(std::string hash, IDigest* mode, std::strin
 	{
 		for (int i = 0; i < Alphabet.size(); i++)
 		{
+			std::string resultHahsed = mode->hash(tmp);
 			countPassword++;
 			if (verbose == true && hash != "")
 			{
-				std::cout << "Password tested \t: " << tmp << " ::: " << mode->hash(tmp) << std::endl;
+				std::cout << "Password tested \t: " << tmp << " ::: " << resultHahsed << std::endl;
 			}
 			if (KeyEventCapture::keyPressed)
 			{
@@ -62,11 +63,11 @@ std::string BruteForce::BruteForcing(std::string hash, IDigest* mode, std::strin
 				std::cout << "Mode \t\t\t: " << mode->Name() << std::endl;
 				std::cout << "Time elapsed    \t: " << fs.count() << " s" << std::endl;
 				std::cout << "Password count  \t: " << countPassword << std::endl;
-				std::cout << "Password tested \t: " << tmp << " ::: " << mode->hash(tmp) << std::endl;
+				std::cout << "Password tested \t: " << tmp << " ::: " << resultHahsed << std::endl;
 				std::cout << "=======================================" << std::endl;
 				KeyEventCapture::keyPressed = false;
 			}
-			if (mode->hash(tmp) == hash)
+			if (resultHahsed == hash)
 			{
 				if (timer)
 				{
@@ -78,7 +79,8 @@ std::string BruteForce::BruteForcing(std::string hash, IDigest* mode, std::strin
 				{
 					std::cout << "Password tested\t: " << countPassword << std::endl;
 				}
-				return tmp;
+				std::string str(tmp.begin(), tmp.end());
+				return str;
 			}
 			tmp = CheckPassWordLetter(tmp);
 			if (hash == "" && countPassword == 1000000)
@@ -157,6 +159,34 @@ std::string BruteForce::CheckPassWordLetter(std::string pass)
 			else
 			{
 				pass.append(1, Alphabet[0]);
+				pass[i] = Alphabet[0];
+			}
+
+		}
+		else
+		{
+			pass[i] = NewCharFromChar(pass[i]);
+		}
+	}
+	return pass;
+}
+
+std::vector<char> BruteForce::CheckPassWordLetter(std::vector<char> pass)
+{
+
+	int Turn = 1;
+	for (int i = 0; i < Turn; i++)
+	{
+		if (pass[i] == Alphabet[Alphabet.size() - 1])
+		{
+			if (pass.size() > i + 1)
+			{
+				pass[i] = Alphabet[0];
+				Turn++;
+			}
+			else
+			{
+				pass.push_back(Alphabet[0]);
 				pass[i] = Alphabet[0];
 			}
 

@@ -2,7 +2,7 @@
 
 **CraHash** is a program for test hash in C++.
 
-*Version : 0.0.1.3*
+*Version : 0.0.1.4*
 
 ### Installation ###
 
@@ -45,10 +45,10 @@ Library used :
       -h, --help                        Display this help menu
 
     Author : Exo-poulpe
-    Version : 0.0.1.3
+    Version : 0.0.1.4
     Example :
-    ./CraHash --hash -t \"TEST\" -m 1 --timer --count
-    ./CraHash --crack -b -m 1 -t \"f4e0d0452b352a5bf0a1a5f2a65cb88b\"
+    ./CraHash --hash -t "TEST" -m 1 --timer --count
+    ./CraHash --crack -b -m 1 -t "f4e0d0452b352a5bf0a1a5f2a65cb88b"
 ```
 
 ### Exemple ###
@@ -64,13 +64,13 @@ With this command the hash "1a79a4d60de6718e8e5b326e338ae533::example" and use t
 Result :
 
 ```
-Mode : MD5
-Wordlist used : D:\Dico\BigFile.txt
-Hash to find : 1a79a4d60de6718e8e5b326e338ae533
+Mode            : MD5
+Wordlist used   : D:\Dico\BigFile.txt
+Hash to find    : 7ecc19e1a0be36ba2c6f05d06b5d3058
 ====================================
-Time elapsed : 4.54277 s
-Password number : 56711
-Hash found : "example"
+Time elapsed    : 6.76694 s
+Password number : 90444
+Hash found      : "weak"
 ```
 
 ### Benchmark ###

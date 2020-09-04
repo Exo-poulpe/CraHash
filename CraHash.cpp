@@ -17,11 +17,11 @@
 
 #include "include/args.hxx"
 #include "boost/thread/thread.hpp"
+
 #include "include/CryptoPP/base64.h"
 #include "include/CryptoPP/md5.h"
 #include "include/CryptoPP/hex.h"
 #include "include/CryptoPP/files.h"
-
 
 
 std::string ToLower(std::string text)
@@ -51,8 +51,8 @@ int main(int argc, char** argvs)
 Version : 0.0.1.4
 
 Example : 
-./CraHash --hash -t \"TEST\" -m 1 --timer --count
-./CraHash --crack -b -m 1 -t \"f4e0d0452b352a5bf0a1a5f2a65cb88b\")";
+./CraHash --hash -t "TEST" -m 1 --timer --count
+./CraHash --crack -b -m 1 -t "f4e0d0452b352a5bf0a1a5f2a65cb88b")";
 
 	args::ArgumentParser parser("This program test hash and generate somes hash", hParser);
 	args::Group group(parser, "This group is all exclusive:", args::Group::Validators::DontCare);
