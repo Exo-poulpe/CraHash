@@ -5,6 +5,8 @@
 #include <fstream>
 #include <stdio.h>
 
+#include <locale>
+
 WordList::WordList(std::string filePath, IDigest* digest, bool verbose, bool counter, bool timer)
 {
 	this->_filePath = filePath;
@@ -14,6 +16,17 @@ WordList::WordList(std::string filePath, IDigest* digest, bool verbose, bool cou
 	this->_timer = timer;
 }
 
+std::string WordList::ToLower(std::string text)
+{
+	std::string result;
+	result.resize(text.size());
+	for (int i = 0; i < text.size(); i++)
+	{
+		result.at(i) = std::tolower(text.at(i));
+	}
+	return result;
+}
+
 std::string WordList::Crack(std::string hash)
 {
 	KeyEventCapture::keyPressed = false;
@@ -21,7 +34,7 @@ std::string WordList::Crack(std::string hash)
 		{
 			while (true)
 			{
-				if (std::cin.get() == '\n')
+				if (std::cin.get() == 0x0A)
 				{
 					KeyEventCapture::keyPressed = true;
 				}
@@ -70,7 +83,7 @@ std::string WordList::Crack(std::string hash)
 				std::cout << "Password number\t: " << this->counter << std::endl;
 			}
 			input.close();
-			return line;
+			return  ToLower(line);
 		}
 	}
 	input.close();
@@ -82,8 +95,8 @@ std::string WordList::Crack(std::string hash)
 	}
 	if (this->_counter)
 	{
-		std::cout << "Password number \t: " << this->counter << std::endl;
+		std::cout << "Password number\t: " << this->counter << std::endl;
 	}
-	return hash;
+	return  ToLower(hash);
 
 }

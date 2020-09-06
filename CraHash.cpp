@@ -46,13 +46,14 @@ int main(int argc, char** argvs)
 {
 
 	std::string hMode = "The value of mode select : \n\t1 : MD5\n\t2 : SHA1\n\t3 : NTLM";
-	std::string hAlphabet = "Alphabet value\n\t1 : [a-z]\n\t2 : [a-zA-Z]\n\t3 : [a-zA-Z0-9]\n\t4 : [a-zA-Z0-9\\s]";
+	std::string hAlphabet = "Alphabet value (you can add alphabet number eg: 15 = [a-z0-9])\n\t1 : [a-z]\n\t2 : [a-zA-Z]\n\t3 : [a-zA-Z0-9]\n\t4 : [a-zA-Z0-9\\s]\n\t5 : [0-9]\n\t6 : [A-Z]\n\t7 : [.,-_)(/&%ç* \"!]";
 	std::string hParser = R"(Author : Exo-poulpe
-Version : 0.0.1.4
+Version : 0.0.1.5
 
 Example : 
 ./CraHash --hash -t "TEST" -m 1 --timer --count
-./CraHash --crack -b -m 1 -t "f4e0d0452b352a5bf0a1a5f2a65cb88b")";
+./CraHash --crack -b -m 1 -a 1 -t "f4e0d0452b352a5bf0a1a5f2a65cb88b"
+./CraHash --crack -b -m 3 -a 15 -t "f4e0d0452b352a5bf0a1a5f2a65cb88b")";
 
 	args::ArgumentParser parser("This program test hash and generate somes hash", hParser);
 	args::Group group(parser, "This group is all exclusive:", args::Group::Validators::DontCare);
@@ -162,27 +163,45 @@ Example :
 		}
 
 		int alpa = args::get(fAlphabet);
+		char* tmpAlpa = new char;
+		alpa = (alpa == 0) ? 3 : alpa;
+		tmpAlpa = (char*)malloc(alpa * sizeof *tmpAlpa);
+		snprintf(tmpAlpa, 10, "%d", alpa);
 		std::string alp;
-		switch (alpa)
+		for (int i = 0; i < strlen(tmpAlpa); i += 1)
 		{
-		case 1:
-			alp = Bf.ALPHABET;
-			break;
-		case 2:
-			alp = Bf.ALPHABET_UPPER;
-			break;
-		case 3:
-			alp = Bf.ALPHABET_UPPER_NUMBER;
-			break;
-		case 4:
-			alp = Bf.ALPHABET_UPPER_NUMBER_SPECIAL;
-			break;
-		default:
-			break;
+			switch (tmpAlpa[i])
+			{
+			case '1':
+				alp += Bf.ALPHABET;
+				break;
+			case '2':
+				alp += Bf.ALPHABET_UPPER;
+				break;
+			case '3':
+				alp += Bf.ALPHABET_UPPER_NUMBER;
+				break;
+			case '4':
+				alp += Bf.ALPHABET_UPPER_NUMBER_SPECIAL;
+				break;
+			case '5':
+				alp += Bf.NUMBER;
+				break;
+			case '6':
+				alp += Bf.UPPER;
+				break;
+			case '7':
+				alp += Bf.SPECIAL;
+				break;
+			default:
+				exit(1);
+				break;
+			}
 		}
 		if (args::get(fSimple))
 		{
 			std::cout << "Mode \t\t: " << digest->Name() << std::endl;
+			std::cout << "Alphabet \t: " << alp << std::endl;
 			std::cout << "Hash to find \t: " << args::get(fText) << std::endl;
 			std::cout << "====================================" << std::endl;
 		}

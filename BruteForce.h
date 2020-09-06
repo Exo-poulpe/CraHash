@@ -34,6 +34,9 @@ public:
 	std::string ALPHABET_UPPER = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	std::string ALPHABET_UPPER_NUMBER = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 	std::string ALPHABET_UPPER_NUMBER_SPECIAL = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,-_)(/&%ç* \"!";
+	std::string NUMBER = "0123456789";
+	std::string UPPER = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	std::string SPECIAL = ".,-_)(/&%ç* \"!";
 	BruteForce();
 	std::string BruteForcing(std::string hash, IDigest* mode, std::string alpa, int min = 1, int max = 0, bool verbose = false, bool counter = false, bool timer = false);
 	void Benchmark(IDigest* digest);
