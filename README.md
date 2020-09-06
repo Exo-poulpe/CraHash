@@ -16,7 +16,7 @@ Library used :
 ### Usage/Help ###
 
 ```
-  .\CraHash.exe {OPTIONS}
+    .\CraHash.exe {OPTIONS}
 
     This program test hash and generate somes hash
 
@@ -32,11 +32,15 @@ Library used :
                                            1 : MD5
                                            2 : SHA1
                                            3 : NTLM
-        -a[Alphabet value]                Alphabet value
+        -a[Alphabet value]                Alphabet value (you can add alphabet
+                                          number eg: 15 = [a-z0-9])
                                            1 : [a-z]
                                            2 : [a-zA-Z]
                                            3 : [a-zA-Z0-9]
                                            4 : [a-zA-Z0-9\s]
+                                           5 : [0-9]
+                                           6 : [A-Z]
+                                           7 : [.,-_)(/&%├º* "!]
         --benchmark                       Test benchmark mode (With mode)
         --count                           Print count
         --simple                          Resume options when start attack
@@ -45,10 +49,11 @@ Library used :
       -h, --help                        Display this help menu
 
     Author : Exo-poulpe
-    Version : 0.0.1.4
+    Version : 0.0.1.5
     Example :
     ./CraHash --hash -t "TEST" -m 1 --timer --count
-    ./CraHash --crack -b -m 1 -t "f4e0d0452b352a5bf0a1a5f2a65cb88b"
+    ./CraHash --crack -b -m 1 -a 1 -t "f4e0d0452b352a5bf0a1a5f2a65cb88b"
+    ./CraHash --crack -b -m 3 -a 15 -t "f4e0d0452b352a5bf0a1a5f2a65cb88b"
 ```
 
 ### Exemple ###
@@ -56,7 +61,7 @@ Library used :
 For exemple :
 
 ```
-./CraHash --crack -w rockyou.txt -m 1 -t \"1a79a4d60de6718e8e5b326e338ae533\" --timer --count --simple
+./CraHash --crack -w rockyou.txt -m 1 -a 1 -t \"1a79a4d60de6718e8e5b326e338ae533\" --timer --count --simple
 ```
 
 With this command the hash "1a79a4d60de6718e8e5b326e338ae533::example" and use the wordlis lst.txt and with methods MD5
